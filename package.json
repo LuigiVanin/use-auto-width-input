@@ -10,7 +10,8 @@
   "scripts": {
     "dev:app": "bun run --cwd playground dev",
     "lint": "bun eslint",
-    "build": "tsup"
+    "build": "tsup",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@types/bun": "latest",

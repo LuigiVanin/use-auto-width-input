@@ -1,15 +1,5 @@
-# use-auto-width-input
+```ts
+const inputRef = useRef(null);
 
-To install dependencies:
-
-```bash
-bun install
+const { width } = useAutoWidthInput(inputRef);
 ```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.2.5. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
