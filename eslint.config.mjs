@@ -38,6 +38,7 @@ const eslintConfig = defineConfig([
         },
       ],
       "react/prop-types": "off",
+      "react-hooks/immutability": "off",
     },
   },
   globalIgnores(["dist", "build"]),

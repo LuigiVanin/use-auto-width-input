@@ -1,14 +1,26 @@
-import {
-  createElement,
-  useEffect,
-  useRef,
-  useState,
-  type RefObject,
-} from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 
-const createGhostTextElement = () => {
+type AutWidthInputOptions = {
+  minWidth?: string;
+};
+
+const createGhostTextElement = (
+  style: CSSStyleDeclaration,
+  options?: AutWidthInputOptions
+) => {
   const tmpTextEl = document.createElement("p");
-  tmpTextEl.innerText = "Text Teste";
+
+  if (style) {
+    tmpTextEl.style.fontFamily = style.fontFamily;
+    tmpTextEl.style.fontSize = style.fontSize;
+    tmpTextEl.style.letterSpacing = style.letterSpacing;
+  }
+
+  if (options?.minWidth) {
+    tmpTextEl.style.minWidth = options?.minWidth;
+  }
+
+  tmpTextEl.innerText = "";
   tmpTextEl.setAttribute("class", "ghost-paragraph-element");
   tmpTextEl.style.position = "absolute";
   tmpTextEl.style.whiteSpace = "pre";
@@ -16,34 +28,47 @@ const createGhostTextElement = () => {
   return document.body.appendChild(tmpTextEl);
 };
 
-export function useAutoWidthInput(inputEl: RefObject<HTMLInputElement | null>) {
+const syncInputWidth = (
+  inputEl: RefObject<HTMLInputElement | null>,
+  ghostTextElement: RefObject<HTMLParagraphElement | null>
+) => {
+  setTimeout(() => {
+    const rect = ghostTextElement.current?.getBoundingClientRect();
+
+    if ((rect?.width !== null || rect?.width !== undefined) && inputEl.current)
+      inputEl.current.style.width = `${rect?.width ?? 0}px`;
+  });
+};
+
+export function useAutoWidthInput(
+  inputEl: RefObject<HTMLInputElement | null>,
+  options?: AutWidthInputOptions
+) {
   const [width] = useState(0);
-  const ghostReflectionText = useRef<HTMLParagraphElement>(null);
+  const ghostTextElement = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     if (inputEl.current) {
-      ghostReflectionText.current = createGhostTextElement();
+      const inputStyles = window.getComputedStyle(inputEl.current);
+      ghostTextElement.current = createGhostTextElement(inputStyles, options);
+
+      syncInputWidth(inputEl, ghostTextElement);
 
       inputEl.current.addEventListener("input", (event) => {
         const target = event.target as HTMLInputElement;
 
-        if (ghostReflectionText.current) {
-          ghostReflectionText.current.innerText = target.value;
+        if (ghostTextElement.current) {
+          ghostTextElement.current.innerText = target.value;
 
-          setTimeout(() => {
-            const rect = ghostReflectionText.current?.getBoundingClientRect();
-
-            if (rect?.width && inputEl.current) {
-              inputEl.current.style.width = `${rect.width}px`;
-            }
-          });
+          syncInputWidth(inputEl, ghostTextElement);
         }
       });
     }
 
     return () => {
-      ghostReflectionText.current?.remove();
+      ghostTextElement.current?.remove();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputEl]);
 
   return {
