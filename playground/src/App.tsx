@@ -9,46 +9,46 @@ const options = {
 function App() {
   const [text, setText] = useState("");
   const inputEl = useRef<HTMLInputElement>(null);
+  const { callbackRef: ref1 } = useAutoWidthInput(inputEl, options);
 
   const hideInputEl = useRef<HTMLInputElement>(null);
+  const [hide1, setHide1] = useState(false);
   const [text2, setText2] = useState("");
+  const { callbackRef: ref2 } = useAutoWidthInput(hideInputEl, options);
+
+  const [hide2, setHide2] = useState(false);
   const [text3, setText3] = useState("");
-
-  useAutoWidthInput(inputEl, options);
-  useAutoWidthInput(hideInputEl, options);
-
-  const [hide, setHide] = useState(false);
 
   return (
     <div className="test-box flex-center">
       <input
-        ref={inputEl}
+        ref={ref1}
         value={text}
         onChange={(e) => setText(e.target?.value || "")}
       />
 
       <hr />
 
-      {!hide && (
+      {!hide1 && (
         <input
-          ref={hideInputEl}
+          ref={ref2}
           value={text2}
           onChange={(e) => setText2(e.target?.value || "")}
         />
       )}
 
-      <button onClick={() => setHide(!hide)}>Hide</button>
+      <button onClick={() => setHide1(!hide1)}>Hide</button>
 
       <hr />
 
-      {!hide && (
+      {!hide2 && (
         <AutoWidthInput
           value={text3}
           onChange={(event) => setText3(event.target.value)}
         />
       )}
 
-      <button onClick={() => setHide(!hide)}>Hide</button>
+      <button onClick={() => setHide2(!hide2)}>Hide</button>
     </div>
   );
 }

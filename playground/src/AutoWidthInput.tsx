@@ -10,13 +10,13 @@ type InputProps = {
 export const AutoWidthInput: React.FC<InputProps> = (props) => {
   const inputEl = useRef<HTMLInputElement>(null);
 
-  useAutoWidthInput(inputEl, {
+  const { callbackRef } = useAutoWidthInput(inputEl, {
     // minWidth: "60px",
   });
 
   return (
     <input
-      ref={inputEl}
+      ref={callbackRef}
       type="text"
       value={props.value}
       style={{ minWidth: "50px" }}
