@@ -1,6 +1,9 @@
 {
   "name": "use-auto-width-input",
-  "module": "./build/index.mjs",
+  "version": "0.0.1",
+  "description": "A React hook to automatically resize an input based on its content",
+  "author": "Luis Vanin",
+  "module": "./build/index.js",
   "main": "./build/index.js",
   "types": "/build/index.d.ts",
   "files": [
@@ -11,7 +14,8 @@
     "dev:app": "bun run --cwd playground dev",
     "lint": "bun eslint",
     "build": "tsup",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prepublishOnly": "bun run build"
   },
   "devDependencies": {
     "@types/bun": "latest",
