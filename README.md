@@ -2,7 +2,8 @@
 
 A lightweight React hook that automatically adjusts input width based on content.
 
-> [!warning] This is a working in progress library and more features will be added in the future, like: more customization via `Option` parameter and function overloading for multiple parameters, giving the hook more flexibility.
+> [!WARNING] 
+> This is a working in progress library and more features will be added in the future, like: more customization via `Option` parameter and function overloading for multiple parameters, giving the hook more flexibility.
 
 ## Installation
 
