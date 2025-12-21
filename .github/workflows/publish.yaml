@@ -1,0 +1,32 @@
+name: Publish package on NPM
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    if: github.event.release.target_commitish == 'main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # Required for Provenance
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      # Setup Node.js to configure .npmrc with the registry and token
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - run: bun install
+      - run: bun run build
+
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

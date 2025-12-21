@@ -3,7 +3,7 @@ import { useAutoWidthInput } from "use-auto-width-input";
 import { AutoWidthInput } from "./AutoWidthInput";
 
 const options = {
-  minWidth: `100px`,
+  minWidth: `125px`,
 };
 
 function App() {
@@ -14,7 +14,9 @@ function App() {
   const hideInputEl = useRef<HTMLInputElement>(null);
   const [hide1, setHide1] = useState(false);
   const [text2, setText2] = useState("");
-  const { callbackRef: ref2 } = useAutoWidthInput(hideInputEl, options);
+  const { callbackRef: ref2 } = useAutoWidthInput(hideInputEl, {
+    minWidth: `90px`,
+  });
 
   const [hide2, setHide2] = useState(false);
   const [text3, setText3] = useState("");
