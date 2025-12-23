@@ -29,6 +29,7 @@ const eslintConfig = defineConfig([
     rules: {
       "no-console": ["warn", { allow: ["warn", "error"] }],
       "no-unused-vars": "off",
+      "no-redeclare": "off", // Disable base rule as it doesn't understand overloads
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
