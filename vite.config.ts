@@ -9,9 +9,9 @@ export default defineConfig(() => {
       AutoImport.vite({
         dts: true,
         imports: ["vitest"],
-        // eslintrc: {
-        //   enabled: true,
-        // },
+        eslintrc: {
+          enabled: true,
+        },
       }),
     ],
     test: {

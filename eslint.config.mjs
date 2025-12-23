@@ -3,6 +3,11 @@ import reactHooks from "eslint-plugin-react-hooks";
 import { defineConfig, globalIgnores } from "eslint/config";
 import js from "@eslint/js";
 import globals from "globals";
+import fs from "node:fs";
+
+const autoImportGlobals = JSON.parse(
+  fs.readFileSync("./.eslintrc-auto-import.json", "utf-8")
+).globals;
 
 const eslintConfig = defineConfig([
   {
@@ -11,6 +16,7 @@ const eslintConfig = defineConfig([
       globals: {
         ...globals.browser,
         ...globals.node,
+        ...autoImportGlobals,
       },
     },
     plugins: {
