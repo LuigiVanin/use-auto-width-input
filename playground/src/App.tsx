@@ -16,6 +16,12 @@ function App() {
   const [text2, setText2] = useState("");
   const { callbackRef: ref2 } = useAutoWidthInput(hideInputEl, {
     minWidth: `90px`,
+    maxWidth: "200px",
+    ghostElement: {
+      styles: {
+        color: "#ff0000",
+      },
+    },
   });
 
   const [hide2, setHide2] = useState(false);
