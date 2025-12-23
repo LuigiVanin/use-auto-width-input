@@ -20,7 +20,7 @@ html {
   gap: 20px;
 }
 
-.test-box input {
+.test-box input.target-input {
   font-size: 29px;
 }
 

@@ -63,10 +63,17 @@ export function useAutoWidthInput(
   const mountBehaviour = () => {
     if (!inputRef.current) return;
 
+    // Doesnt make sense to mount an element if the element already exist
+    if (ghostElement.current) return;
+
     const styles = window.getComputedStyle(inputRef.current);
     ghostElement.current = createGhostElement(options);
 
-    ghostElement.current.innerText = inputRef.current.value;
+    if (options?.ghostElement?.className)
+      ghostElement.current.classList.add(options?.ghostElement?.className);
+
+    ghostElement.current.id = options?.ghostElement?.id || "";
+    ghostElement.current.innerText = inputRef.current.value ?? "";
 
     if (options?.minWidth) inputRef.current.style.minWidth = options?.minWidth;
     if (options?.maxWidth) inputRef.current.style.maxWidth = options?.maxWidth;
@@ -86,7 +93,6 @@ export function useAutoWidthInput(
   useEffect(
     () => {
       mountBehaviour();
-
       return () => destroy();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

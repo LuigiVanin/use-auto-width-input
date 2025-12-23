@@ -18,6 +18,8 @@ function App() {
     minWidth: `90px`,
     maxWidth: "200px",
     ghostElement: {
+      id: "testid",
+      className: "class-test",
       styles: {
         color: "#ff0000",
       },
@@ -32,6 +34,7 @@ function App() {
       <input
         ref={ref1}
         value={text}
+        className="target-input"
         onChange={(e) => setText(e.target?.value || "")}
       />
 

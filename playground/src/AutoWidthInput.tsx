@@ -19,7 +19,10 @@ export const AutoWidthInput: React.FC<InputProps> = (props) => {
       ref={callbackRef}
       type="text"
       value={props.value}
-      style={{ minWidth: "50px" }}
+      style={{
+        minWidth: "50px",
+        fontSize: 10,
+      }}
       onChange={props.onChange}
     />
   );
