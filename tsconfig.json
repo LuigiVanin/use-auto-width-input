@@ -26,5 +26,5 @@
     "noPropertyAccessFromIndexSignature": false
   },
 
-  "include": ["src", "tests/vitest-env.d.ts", "auto-imports.d.ts"]
+  "include": ["src", "tests", "auto-imports.d.ts"]
 }
