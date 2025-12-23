@@ -6,15 +6,43 @@ import {
   type RefObject,
 } from "react";
 import type { AutWidthInputOptions } from "./types";
-import { applyFontStyles, createGhostElement, syncWidth } from "./helpers";
+import {
+  applyFontStyles,
+  applyStyles,
+  createGhostElement,
+  syncWidth,
+} from "./helpers";
+
+type UseAutoWidthInputReturn = {
+  width: string | number;
+  callbackRef: (element: HTMLInputElement | null) => void;
+  ref: RefObject<HTMLInputElement | null>;
+};
+
+// export function useAutoWidthInput(
+//   inputRef: RefObject<HTMLInputElement | null>,
+//   options?: AutWidthInputOptions
+// ): UseAutoWidthInputReturn;
+
+// export function useAutoWidthInput(
+//   options?: AutWidthInputOptions
+// ): UseAutoWidthInputReturn;
 
 export function useAutoWidthInput(
   inputRef: RefObject<HTMLInputElement | null>,
   options?: AutWidthInputOptions
-) {
-  const [width] = useState(options?.minWidth ?? 0);
+): UseAutoWidthInputReturn {
+  const [width, setWidth] = useState(options?.minWidth ?? 0);
   const ghostElement = useRef<HTMLElement>(null);
   const input = inputRef.current;
+
+  const syncWidthToState = (
+    inputRef: RefObject<HTMLInputElement | null>,
+    ghostElement: RefObject<HTMLElement | null>
+  ) => {
+    const currentWidth = syncWidth(inputRef, ghostElement);
+    if (currentWidth) setWidth(currentWidth);
+  };
 
   const handleInput = (event: Event) => {
     const target = event.target as HTMLInputElement;
@@ -22,7 +50,7 @@ export function useAutoWidthInput(
     if (ghostElement.current) {
       ghostElement.current.innerText = target.value;
 
-      syncWidth(inputRef, ghostElement);
+      syncWidthToState(inputRef, ghostElement);
     }
   };
 
@@ -32,8 +60,41 @@ export function useAutoWidthInput(
     ghostElement.current = null;
   };
 
+  const mountBehaviour = () => {
+    if (!inputRef.current) return;
+
+    // Doesnt make sense to mount an element if the element already exist
+    if (ghostElement.current) return;
+
+    const styles = window.getComputedStyle(inputRef.current);
+    ghostElement.current = createGhostElement(options);
+
+    if (options?.ghostElement?.className)
+      ghostElement.current.classList.add(options?.ghostElement?.className);
+
+    ghostElement.current.id = options?.ghostElement?.id || "";
+    ghostElement.current.innerText = inputRef.current.value ?? "";
+
+    if (options?.minWidth) inputRef.current.style.minWidth = options?.minWidth;
+    if (options?.maxWidth) inputRef.current.style.maxWidth = options?.maxWidth;
+
+    applyFontStyles(styles, ghostElement.current);
+
+    // Here I allow you to mess up the styles of the hidden element
+    if (options?.ghostElement?.styles)
+      // NOTE: this will overwrite anything from the previus `applyFontStyles`
+      applyStyles(options?.ghostElement?.styles, ghostElement.current);
+
+    syncWidthToState(inputRef, ghostElement);
+
+    inputRef.current.addEventListener("input", handleInput);
+  };
+
   useEffect(
-    () => () => destroy(),
+    () => {
+      mountBehaviour();
+      return () => destroy();
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
@@ -44,14 +105,7 @@ export function useAutoWidthInput(
 
       if (!element) destroy();
       else if (element && inputRef.current) {
-        const styles = window.getComputedStyle(inputRef.current);
-        ghostElement.current = createGhostElement(options);
-
-        ghostElement.current.innerText = inputRef.current.value;
-        applyFontStyles(styles, ghostElement.current);
-        syncWidth(inputRef, ghostElement);
-
-        inputRef.current.addEventListener("input", handleInput);
+        mountBehaviour();
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

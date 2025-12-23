@@ -11,6 +11,21 @@ export const applyFontStyles = (
   target.style.fontWeight = styles.fontWeight;
 };
 
+export const applyStyles = (
+  styles: Partial<CSSStyleDeclaration>,
+  target: HTMLElement
+) => {
+  Object.keys(styles).forEach((styleAttr: string) => {
+    const key = styleAttr as keyof CSSStyleDeclaration;
+
+    const value = styles[key];
+
+    if (typeof value === "string" && typeof key === "string") {
+      target.style.setProperty(key, value);
+    }
+  });
+};
+
 export const createGhostElement = (options?: AutWidthInputOptions) => {
   const tempElement = document.createElement("p");
 
@@ -41,8 +56,12 @@ export const syncWidth = (
   inputRef: RefObject<HTMLInputElement | null>,
   ghostElement: RefObject<HTMLElement | null>
 ) => {
-  if (inputRef.current)
+  if (inputRef.current) {
     inputRef.current.style.width = `${
       ghostElement.current?.getBoundingClientRect()?.width ?? 0
     }px`;
+    return inputRef.current.style.width;
+  }
+
+  return null;
 };
