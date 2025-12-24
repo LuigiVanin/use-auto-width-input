@@ -73,6 +73,7 @@ export function useAutoWidthInput(
       ghostElement.current.classList.add(options?.ghostElement?.className);
 
     ghostElement.current.id = options?.ghostElement?.id || "";
+    // Ensure we capture the current value at mount time
     ghostElement.current.innerText = inputRef.current.value ?? "";
 
     if (options?.minWidth) inputRef.current.style.minWidth = options?.minWidth;

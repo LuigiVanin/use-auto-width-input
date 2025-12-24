@@ -7,9 +7,9 @@ const options = {
 };
 
 function App() {
-  const [text, setText] = useState("");
+  const [text, setText] = useState("Teste");
   const inputEl = useRef<HTMLInputElement>(null);
-  const { callbackRef: ref1 } = useAutoWidthInput(inputEl, options);
+  const { callbackRef: ref1 } = useAutoWidthInput(inputEl);
 
   const hideInputEl = useRef<HTMLInputElement>(null);
   const [hide1, setHide1] = useState(false);
