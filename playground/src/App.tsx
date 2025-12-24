@@ -7,7 +7,7 @@ const options = {
 };
 
 function App() {
-  const [text, setText] = useState("");
+  const [text, setText] = useState("Teste");
   const inputEl = useRef<HTMLInputElement>(null);
   const { callbackRef: ref1 } = useAutoWidthInput(inputEl, options);
 
@@ -33,8 +33,8 @@ function App() {
     <div className="test-box flex-center">
       <input
         ref={ref1}
-        value={text}
         className="target-input"
+        value={text}
         onChange={(e) => setText(e.target?.value || "")}
       />
 
