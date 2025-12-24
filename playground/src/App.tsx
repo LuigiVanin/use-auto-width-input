@@ -33,8 +33,8 @@ function App() {
     <div className="test-box flex-center">
       <input
         ref={ref1}
-        value={text}
         className="target-input"
+        value={text}
         onChange={(e) => setText(e.target?.value || "")}
       />
 

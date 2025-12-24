@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type RefObject,
-} from "react";
+import { useCallback, useEffect, useRef, type RefObject } from "react";
 import type { AutWidthInputOptions } from "./types";
 import {
   applyFontStyles,
@@ -14,7 +8,6 @@ import {
 } from "./helpers";
 
 type UseAutoWidthInputReturn = {
-  width: string | number;
   callbackRef: (element: HTMLInputElement | null) => void;
   ref: RefObject<HTMLInputElement | null>;
 };
@@ -32,17 +25,10 @@ export function useAutoWidthInput(
   inputRef: RefObject<HTMLInputElement | null>,
   options?: AutWidthInputOptions
 ): UseAutoWidthInputReturn {
-  const [width, setWidth] = useState(options?.minWidth ?? 0);
+  // NOTE: I removed the width state because it inserts a race condition in chrome with the onChange event and setText
+  // const [width, setWidth] = useState(options?.minWidth ?? 0);
   const ghostElement = useRef<HTMLElement>(null);
   const input = inputRef.current;
-
-  const syncWidthToState = (
-    inputRef: RefObject<HTMLInputElement | null>,
-    ghostElement: RefObject<HTMLElement | null>
-  ) => {
-    const currentWidth = syncWidth(inputRef, ghostElement);
-    if (currentWidth) setWidth(currentWidth);
-  };
 
   const handleInput = (event: Event) => {
     const target = event.target as HTMLInputElement;
@@ -50,7 +36,7 @@ export function useAutoWidthInput(
     if (ghostElement.current) {
       ghostElement.current.innerText = target.value;
 
-      syncWidthToState(inputRef, ghostElement);
+      syncWidth(inputRef, ghostElement);
     }
   };
 
@@ -86,7 +72,7 @@ export function useAutoWidthInput(
       // NOTE: this will overwrite anything from the previus `applyFontStyles`
       applyStyles(options?.ghostElement?.styles, ghostElement.current);
 
-    syncWidthToState(inputRef, ghostElement);
+    syncWidth(inputRef, ghostElement);
 
     inputRef.current.addEventListener("input", handleInput);
   };
@@ -114,7 +100,6 @@ export function useAutoWidthInput(
   );
 
   return {
-    width,
     callbackRef,
     ref: inputRef,
   };
