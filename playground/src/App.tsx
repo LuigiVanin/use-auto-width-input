@@ -21,13 +21,29 @@ function App() {
       id: "testid",
       className: "class-test",
       styles: {
-        color: "#ff0000",
+        color: "blue",
       },
     },
   });
 
   const [hide2, setHide2] = useState(false);
   const [text3, setText3] = useState("");
+
+  const { callbackRef: ref4 } = useAutoWidthInput();
+  const [text4, setText4] = useState("");
+
+  const { callbackRef: ref5 } = useAutoWidthInput({
+    minWidth: "100px",
+    maxWidth: "300px",
+    ghostElement: {
+      id: "testid",
+      className: "class-test",
+      styles: {
+        color: "#ff0000",
+      },
+    },
+  });
+  const [text5, setText5] = useState("");
 
   return (
     <div className="test-box flex-center">
@@ -60,6 +76,22 @@ function App() {
       )}
 
       <button onClick={() => setHide2(!hide2)}>Hide</button>
+
+      <hr />
+
+      <input
+        ref={ref4}
+        value={text4}
+        onChange={(event) => setText4(event.target.value)}
+      />
+
+      <hr />
+
+      <input
+        ref={ref5}
+        value={text5}
+        onChange={(event) => setText5(event.target.value)}
+      />
     </div>
   );
 }
