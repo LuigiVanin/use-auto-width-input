@@ -21,7 +21,9 @@ export const applyStyles = (
     const value = styles[key];
 
     if (typeof value === "string" && typeof key === "string") {
-      target.style.setProperty(key, value);
+      // target.style.setProperty(key, value);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (target.style as any)[key] = value;
     }
   });
 };
