@@ -1,6 +1,6 @@
 {
   "name": "use-auto-width-input",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A React hook to automatically resize an input based on its content",
   "author": "Luis Vanin",
   "module": "./dist/index.js",
