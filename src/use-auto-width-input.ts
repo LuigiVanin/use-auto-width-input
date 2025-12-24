@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, type RefObject } from "react";
-import type { AutWidthInputOptions } from "./types";
+import type { AutWidthInputOptions, UseAutoWidthInputReturn } from "./types";
 import {
   applyFontStyles,
   applyStyles,
@@ -7,27 +7,32 @@ import {
   syncWidth,
 } from "./helpers";
 
-type UseAutoWidthInputReturn = {
-  callbackRef: (element: HTMLInputElement | null) => void;
-  ref: RefObject<HTMLInputElement | null>;
-};
-
-// export function useAutoWidthInput(
-//   inputRef: RefObject<HTMLInputElement | null>,
-//   options?: AutWidthInputOptions
-// ): UseAutoWidthInputReturn;
-
-// export function useAutoWidthInput(
-//   options?: AutWidthInputOptions
-// ): UseAutoWidthInputReturn;
+export function useAutoWidthInput(
+  inputRef?: RefObject<HTMLInputElement | null>,
+  options?: AutWidthInputOptions
+): UseAutoWidthInputReturn;
 
 export function useAutoWidthInput(
-  inputRef: RefObject<HTMLInputElement | null>,
   options?: AutWidthInputOptions
+): UseAutoWidthInputReturn;
+
+export function useAutoWidthInput(
+  inputRefOrOptions?: RefObject<HTMLInputElement | null> | AutWidthInputOptions,
+  opts?: AutWidthInputOptions
 ): UseAutoWidthInputReturn {
-  // NOTE: I removed the width state because it inserts a race condition in chrome with the onChange event and setText
+  // NOTE: Removed the width state because it inserts a race condition in chrome with the onChange event and setText
   // const [width, setWidth] = useState(options?.minWidth ?? 0);
+  const isRefObject =
+    typeof inputRefOrOptions === "object" && "current" in inputRefOrOptions;
+
   const ghostElement = useRef<HTMLElement>(null);
+  const internalInpuRef = useRef<HTMLInputElement>(null);
+
+  const inputRef = isRefObject ? inputRefOrOptions : internalInpuRef;
+  const options: AutWidthInputOptions | undefined = isRefObject
+    ? opts
+    : inputRefOrOptions;
+
   const input = inputRef.current;
 
   const handleInput = (event: Event) => {
